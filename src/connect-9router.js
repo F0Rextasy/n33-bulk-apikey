@@ -4,7 +4,7 @@
 /**
  * Connect N33 AI to a 9Router instance.
  *
- * N33 AI serves an OpenAI-compatible endpoint (https://inference.n33.global/v1), so a single
+ * N33 AI serves an OpenAI-compatible endpoint (http://127.0.0.1:20177/v1), so a single
  * provider-node carries every key: this registers one `openai-compatible` node
  * with prefix `n33` and then one connection per API key, named
  * `n33-001`, `n33-002`, … Re-running it is idempotent (an existing node
@@ -13,7 +13,7 @@
  * Usage:
  *   node src/connect-9router.js \
  *     --base http://localhost:20128 --password 123456 \
- *     --api-key dahl_xxxx [--name "N33 AI"] [--prefix n33]
+ *     --api-key <key> [--name "N33 AI"] [--prefix n33]
  *
  *   node src/connect-9router.js                  # register every key in keys.txt
  *   node src/connect-9router.js --model <id>     # pin the connection's default model
@@ -24,7 +24,7 @@
  *   --api-key <key>    N33 AI API key     (default: every key in keys.txt)
  *   --name <name>      provider-node name       (default N33 AI)
  *   --prefix <slug>    provider prefix in 9Router (default n33)
- *   --base-url <url>   provider base URL        (default https://inference.n33.global/v1)
+ *   --base-url <url>   provider base URL        (default http://127.0.0.1:20177/v1)
  *   --model <id>       connection default model (default MiniMaxAI/MiniMax-M2.7)
  *
  * Zero dependencies. Node.js >= 18.
