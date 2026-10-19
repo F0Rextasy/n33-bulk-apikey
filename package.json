@@ -1,0 +1,34 @@
+{
+  "name": "n33-bulk-apikey",
+  "version": "1.0.0",
+  "description": "Bulk-mint n33.ai guest chat sessions — a captcha-free, mailbox-free rail where every token survived a live chat call, served through a local OpenAI-compatible bridge.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "n33-bulk-apikey": "src/cli.js",
+    "n33-bulk-apikey-launcher": "src/launcher.js"
+  },
+  "main": "src/cli.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/launcher.js",
+    "mint": "node src/cli.js",
+    "9router": "node src/connect-9router.js",
+    "serve": "node src/serve.js"
+  },
+  "keywords": [
+    "api-key",
+    "bulk",
+    "register",
+    "launcher",
+    "n33",
+    "apikey"
+  ],
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}
