@@ -50,7 +50,7 @@ There is no signup credit, no card and no e-mail step on this rail — the free 
 | Mint limit | **~3 sign-ins per window per exit address**, then `429 Too many requests` |
 | The unit that scales | **one exit = one account** → `--count N` is really "N guest sessions" |
 
-Because the throttle is per **address**, the pool is not a nicety here: the tool pins one exit to one account, and the pool size caps the useful concurrency.
+Because the throttle is per **address**, the pool is what scales this rail: the tool pins one exit to one account, and the pool size caps the useful concurrency. It is also **optional** — with no pool the CLI runs on this machine's own address, one account at a time.
 
 > 💡 The free tier is set by N33 AI and can change. Check the live numbers at [n33.ai](https://n33.ai) — and let the tool's own gate decide:
 
@@ -101,7 +101,8 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 
-# 1) your proxy list, one per line (http://… or socks5://…)
+# 1) optional: your proxy list, one per line (http://… or socks5://…)
+#    skip this and the CLI connects directly
 printf 'socks5h://127.0.0.1:1080\n' > proxies.txt
 
 # 2) go
@@ -168,7 +169,7 @@ exits (one per account, the throttle is per address)         one exit pinned to 
 ```bash
 node src/cli.js --count 100 --conc 6      # mint (default 50, conc 4)
 node src/cli.js --verify-only             # re-check every token in keys.txt
-node src/cli.js --screen                  # test the proxy list against n33.ai
+node src/cli.js --screen                  # test the pool (or the direct route) against n33.ai
 node src/cli.js --help
 node src/serve.js --port 20177            # OpenAI-compatible bridge
 ```
@@ -177,15 +178,18 @@ node src/serve.js --port 20177            # OpenAI-compatible bridge
 | --- | --- | --- |
 | `--count` | `50` | how many guest sessions to mint |
 | `--model` | `n33-chat` | model used for the live verification |
-| `--conc` | `4` | accounts in flight (capped by the pool size) |
+| `--conc` | `4` | accounts in flight (capped by the pool size — `1` in direct mode) |
 | `--gap` | `0.5` | seconds to wait after each account |
 | `--retries` | `6` | attempts per account (429 is retried with backoff) |
-| `--proxies` | `proxies.txt` | proxy list file |
-| `N33_PROXIES` | — | environment override for the list path |
+| `--proxies` | `proxies.txt` | proxy list file — **optional**, without it the tool connects directly |
+| `N33_PROXIES` | — | environment override for the list path — **optional** |
 
 ## 🛰️ Behind a proxy
 
-Every request leaves through a proxy line from your pool, and **one line is pinned to one account**: the sign-in throttle is per address, so hopping exits mid-flight is what produces needless 429s. A dead line fails that account and the tool moves on; `--screen` tells you which lines reach `n33.ai:443` before you spend a run on them.
+**Optional — recommended at scale (per-IP limits, bans).** The tool works without a proxy too.
+
+- **With a pool:** pass `--proxies <file>` (or set `N33_PROXIES`) and every request goes through a line from that list, with **one line pinned to one account**: the sign-in throttle is per address, so hopping exits mid-flight is what produces needless 429s. A dead line fails that account and the tool moves on — fail-closed while a pool is provided, never a silent direct fallback — and `--screen` tells you which lines reach `n33.ai:443` before you spend a run on them.
+- **Without a pool:** the CLI prints `running WITHOUT a proxy (direct)` and connects directly. Nothing about sign-in, the live chat proof or `keys.txt` changes — only where the packets leave from. One address means the throttle (~3 sign-ins per window) caps the run at `conc 1`, and `--screen` then tests the direct route.
 
 ## 📄 Files
 

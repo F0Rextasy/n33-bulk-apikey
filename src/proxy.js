@@ -13,9 +13,10 @@
  *   · Node's https client, via `createAgent()`                    -> an https.Agent
  *     whose `createConnection()` returns a TLS socket layered on the tunnel.
  *
- * Everything here is written so a failed proxy fails the *account*, never
- * falls back to a direct connection: the whole point is that no request ever
- * leaves the machine from its own address.
+ * Fail-closed while a pool was given: a failed proxy fails the *account* and
+ * never falls back to a direct connection, since the whole point of a pool is
+ * that no request leaves the machine from its own address. With no pool at all
+ * the caller passes `null` — the direct sentinel — and requests go straight out.
  */
 
 const net = require('net');
@@ -376,7 +377,42 @@ function connectSocks4(proxy, { host, port, timeoutMs = DEFAULT_TIMEOUT_MS }) {
   });
 }
 
+/**
+ * A plain socket straight to host:port — the direct twin of the tunnels above,
+ * used when the caller passed the `null` sentinel (no pool was provided).
+ */
+function directConnect(host, port, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  return new Promise((resolve, reject) => {
+    const socket = net.connect({ host, port });
+    let settled = false;
+    const fail = (err) => {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      reject(err);
+    };
+    const timer = setTimeout(() => fail(new Error(`direct connect timeout (${host}:${port})`)), timeoutMs);
+    socket.on('error', (e) => {
+      clearTimeout(timer);
+      fail(new Error(`direct connect failed (${host}:${port}): ${e.message}`));
+    });
+    socket.setNoDelay(true);
+    socket.on('connect', () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve(socket);
+    });
+  });
+}
+
+/**
+ * A tunnel to host:port through `proxy`, or a plain socket when `proxy` is
+ * `null` — the sentinel that says no pool was supplied, so there is nothing to
+ * fail closed against.
+ */
 function openTunnel(proxy, { host, port, timeoutMs } = {}) {
+  if (!proxy) return directConnect(host, port, timeoutMs);
   if (proxy.protocol === 'socks5') return connectSocks5(proxy, { host, port, timeoutMs });
   if (proxy.protocol === 'socks4') return connectSocks4(proxy, { host, port, timeoutMs });
   return connectHttpProxy(proxy, { host, port, timeoutMs });

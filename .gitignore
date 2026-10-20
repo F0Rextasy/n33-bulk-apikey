@@ -11,6 +11,8 @@ launcher.config.json
 .env
 .env.*
 
+# local run artifacts (contain live keys — never push)
+run-artifacts-backup/
 *.log
 .DS_Store
 Thumbs.db

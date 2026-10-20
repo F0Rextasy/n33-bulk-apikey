@@ -16,14 +16,18 @@
  *   node src/cli.js --count 100                 # mint (default 50)
  *   node src/cli.js --count 100 --conc 6        # how many accounts at once
  *   node src/cli.js --verify-only               # re-check keys.txt
- *   node src/cli.js --screen                    # test the proxy list against n33.ai
+ *   node src/cli.js --screen                    # test the pool (or direct) against n33.ai
  *   node src/cli.js --help
  *
  * Files (repo root):
- *   proxies.txt     your exits, one per line   (or N33_PROXIES=<file>)
+ *   proxies.txt     your exits, one per line   (optional — or N33_PROXIES=<file>)
  *   keys.txt        one live-verified token per line
  *   accounts.json   one record per account
  *   outputs/        run log
+ *
+ * The proxy list is OPTIONAL: with --proxies (or the N33_PROXIES env) every
+ * request goes through an exit from your pool; with no pool the CLI prints
+ * `running WITHOUT a proxy (direct)` and connects directly.
  */
 
 const fs = require('fs');
@@ -53,17 +57,20 @@ Usage: node src/cli.js [options]
   --model id       model used for the live check    (default ${n33.DEFAULT_MODEL})
   --conc N         accounts in flight               (default 4)
   --gap S          seconds to wait after an account (default 0.5)
-  --proxies FILE   proxy list                       (default proxies.txt)
+  --proxies FILE   proxy list (default proxies.txt; env N33_PROXIES) [optional]
   --retries N      attempts per account             (default 6)
   --verify-only    re-check every token in keys.txt
   --screen         probe the proxy list for exits that reach n33.ai
   --help
 
 Environment:
-  N33_PROXIES      proxy list path (wins over the default, not over --proxies)
+  N33_PROXIES      proxy list path (wins over the default, not over --proxies) [optional]
 
 Guest sessions are rate-limited per exit address, so the pool size caps the
 useful concurrency: one account is pinned to one exit and never hops.
+
+Requests go through your proxy list when one is provided (--proxies /
+N33_PROXIES). Without a pool the tool connects directly.
 `);
   process.exit(0);
 }
@@ -107,17 +114,37 @@ const log = (msg) => {
 };
 const maskExit = (line) => String(line || 'direct').replace(/:[^:@/]+@/, ':***@');
 
-if (!fs.existsSync(PROXY_FILE)) {
-  say(`! proxy list not found: ${PROXY_FILE}`);
-  say('  put one exit per line (http://host:port, socks5://host:port or host:port)');
-  process.exit(1);
+/**
+ * The pool is optional. No file, or a file with no usable line, means DIRECT
+ * mode: the exit list becomes the single `null` sentinel, which every consumer
+ * here already understands — `label()` reads it as `(direct)`, `openTunnel()`
+ * returns a plain socket and `n33.request()` skips the proxy agent. Fail-closed
+ * still rules the moment a pool *is* given: a dead exit fails that account and
+ * is never quietly swapped for a direct connection.
+ */
+function loadExits() {
+  if (!fs.existsSync(PROXY_FILE)) {
+    say(
+      `no proxy list at ${PROXY_FILE} — running WITHOUT a proxy (direct). ` +
+        'Put exits there (or pass --proxies) to route through them.'
+    );
+    return [null];
+  }
+  const exits = loadPoolFile(PROXY_FILE);
+  if (!exits.length) {
+    say(`${PROXY_FILE} has no usable proxy line — running WITHOUT a proxy (direct).`);
+    say('  one exit per line: http://host:port, socks5://host:port or host:port');
+    return [null];
+  }
+  return exits;
 }
-const EXITS = loadPoolFile(PROXY_FILE);
-if (!EXITS.length) {
-  say(`! ${PROXY_FILE} holds no usable proxy line`);
-  process.exit(1);
-}
-/** One exit per in-flight account: sharing an address is what trips the 429 bucket. */
+const EXITS = loadExits();
+const DIRECT = EXITS[0] === null;
+/**
+ * One exit per in-flight account: sharing an address is what trips the 429
+ * bucket. Without a pool every account shares this machine's one address, so
+ * the run stays serial.
+ */
 const CONC = Math.max(1, Math.min(parseInt(one('conc', '4'), 10) || 4, EXITS.length));
 
 const readKeys = () => {
@@ -245,7 +272,7 @@ async function worker(id) {
 }
 
 async function screen() {
-  log(`screening ${EXITS.length} exits against n33.ai:443`);
+  log(`screening ${DIRECT ? 'the direct route' : `${EXITS.length} exits`} against n33.ai:443`);
   // Collected, then printed in list order: concurrent progress lines interleave
   // and a redirected tail can drop them.
   const rows = new Array(EXITS.length);
@@ -262,7 +289,7 @@ async function screen() {
   );
   const ok = rows.filter((r) => r.endsWith('live')).length;
   say(rows.join('\n'));
-  say(`\n  ${ok}/${EXITS.length} exits reach n33.ai`);
+  say(`\n  ${ok}/${EXITS.length} reach n33.ai`);
 }
 
 /**
@@ -338,7 +365,10 @@ async function main() {
   if (flag('screen')) return screen();
   if (flag('verify-only')) return verifyOnly();
 
-  log(`n33-bulk — count=${COUNT} conc=${CONC} model=${MODEL} exits=${EXITS.length} (${PROXY_FILE})`);
+  log(
+    `n33-bulk — count=${COUNT} conc=${CONC} model=${MODEL} ` +
+      `exits=${DIRECT ? 'direct' : EXITS.length} (${PROXY_FILE})`
+  );
   const t0 = Date.now();
   await Promise.all(Array.from({ length: CONC }, (_, i) => worker(i + 1)));
   const secs = (Date.now() - t0) / 1000;
