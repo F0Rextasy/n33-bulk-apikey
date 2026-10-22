@@ -123,6 +123,11 @@ The launcher asks for the proxy list, the count and the verification model, reme
 
 ## ✅ Verified working — every key is tested
 
+> **Quality gates.** Every key here passed a live `chat-200` before it was written to `keys.txt`
+> (dead keys are never shipped). Router combos follow the same rule at the model level: an entry is
+> added **only if the model answers `chat-200` and can call tools** — a model without tool support,
+> a dead key or a dead provider is dropped instead of added. Works with **9Router and OmniRoute**.
+
 Every claim below was measured against the live site on **2026-10-19**.
 
 | Check | Result |
@@ -211,7 +216,6 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 ```
 
 Defaults: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Models are then served as `n33/<model id>` and load-balanced across every token; each connection carries a token from `keys.txt`, which the bridge uses for that request.
-
 
 ## 🔌 Connect to OmniRoute
 

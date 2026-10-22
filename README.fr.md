@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-3%20served-412991?style=for-the-badge)](https://n33.ai/chat)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 Démarrage rapide](#-quick-start) · [🎁 Offre gratuite](#-free-tier--how-much-you-get) · [🤖 Modèles](#-models--all-3-of-them) · [🧪 Utiliser l'API](#-how-to-use-the-api) · [✅ Vérifié](#-verified-working--every-key-is-tested) · [🧭 Comment ça marche](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Options](#️-cli-options) · [🛰️ Proxys](#️-behind-a-proxy) · [🐞 Problèmes](#-issues)
@@ -209,6 +210,16 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 
 Valeurs par défaut : `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Les modèles sont alors servis sous la forme `n33/<model id>` et répartis en équilibrage de charge entre tous les jetons ; chaque connexion transporte un jeton de `keys.txt`, que le pont utilise pour cette requête.
 
+## 🔌 Connexion à OmniRoute
+
+[OmniRoute](https://omniroute.online) est un routeur auto-hébergé compatible OpenAI. Comme n33.ai n'a pas la forme d'OpenAI, c'est le pont que OmniRoute interroge — démarrez-le d'abord, puis enregistrez les clés :
+
+```bash
+node src/serve.js &            # http://127.0.0.1:20177/v1
+node src/connect-omniroute.js    # registers the provider node + one connection per key
+```
+
+Valeurs par défaut : `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Les modèles sont alors servis sous la forme `n33/<model id>` et répartis en équilibrage de charge entre tous les jetons ; chaque connexion transporte un jeton de `keys.txt`, que le pont utilise pour cette requête.
 ## 🔑 Ce qu'une clé vous apporte
 
 | | |

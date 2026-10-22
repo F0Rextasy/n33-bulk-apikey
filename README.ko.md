@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-3%20served-412991?style=for-the-badge)](https://n33.ai/chat)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 빠른 시작](#-quick-start) · [🎁 무료 등급](#-free-tier--how-much-you-get) · [🤖 모델](#-models--all-3-of-them) · [🧪 API 사용하기](#-how-to-use-the-api) · [✅ 검증됨](#-verified-working--every-key-is-tested) · [🧭 동작 방식](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ 옵션](#️-cli-options) · [🛰️ 프록시](#️-behind-a-proxy) · [🐞 이슈](#-issues)
@@ -209,6 +210,16 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 
 기본값: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. 그러면 모델은 `n33/<model id>`로 제공되며 모든 토큰에 걸쳐 로드 밸런싱됩니다; 각 연결은 `keys.txt`의 토큰을 지니고, 브리지가 해당 요청에 그 토큰을 사용합니다.
 
+## 🔌 OmniRoute에 연결
+
+[OmniRoute](https://omniroute.online)는 자체 호스팅되는 OpenAI 호환 라우터입니다. n33.ai는 OpenAI 형식이 아니므로, OmniRoute가 대화하는 대상은 브리지입니다 — 먼저 브리지를 시작한 뒤 키를 등록하세요:
+
+```bash
+node src/serve.js &            # http://127.0.0.1:20177/v1
+node src/connect-omniroute.js    # registers the provider node + one connection per key
+```
+
+기본값: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. 그러면 모델은 `n33/<model id>`로 제공되며 모든 토큰에 걸쳐 로드 밸런싱됩니다; 각 연결은 `keys.txt`의 토큰을 지니고, 브리지가 해당 요청에 그 토큰을 사용합니다.
 ## 🔑 키 하나로 얻는 것
 
 | | |

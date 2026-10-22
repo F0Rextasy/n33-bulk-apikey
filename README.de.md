@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-3%20served-412991?style=for-the-badge)](https://n33.ai/chat)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 Schnellstart](#-quick-start) · [🎁 Kostenloser Tarif](#-free-tier--how-much-you-get) · [🤖 Modelle](#-models--all-3-of-them) · [🧪 Die API verwenden](#-how-to-use-the-api) · [✅ Verifiziert](#-verified-working--every-key-is-tested) · [🧭 So funktioniert es](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Optionen](#️-cli-options) · [🛰️ Proxys](#️-behind-a-proxy) · [🐞 Probleme](#-issues)
@@ -209,6 +210,16 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 
 Standardwerte: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Die Modelle werden dann als `n33/<model id>` bereitgestellt und über jeden Token lastverteilt; jede Verbindung trägt einen Token aus `keys.txt`, den die Brücke für diese Anfrage verwendet.
 
+## 🔌 Mit OmniRoute verbinden
+
+[OmniRoute](https://omniroute.online) ist ein selbst gehosteter, OpenAI-kompatibler Router. Da n33.ai nicht OpenAI-förmig ist, spricht OmniRoute mit der Brücke — starte sie zuerst und registriere dann die Schlüssel:
+
+```bash
+node src/serve.js &            # http://127.0.0.1:20177/v1
+node src/connect-omniroute.js    # registers the provider node + one connection per key
+```
+
+Standardwerte: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Die Modelle werden dann als `n33/<model id>` bereitgestellt und über jeden Token lastverteilt; jede Verbindung trägt einen Token aus `keys.txt`, den die Brücke für diese Anfrage verwendet.
 ## 🔑 Was ein Schlüssel dir bringt
 
 | | |

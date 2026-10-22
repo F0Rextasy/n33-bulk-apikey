@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-3%20served-412991?style=for-the-badge)](https://n33.ai/chat)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 Início rápido](#-quick-start) · [🎁 Nível gratuito](#-free-tier--how-much-you-get) · [🤖 Modelos](#-models--all-3-of-them) · [🧪 Use a API](#-how-to-use-the-api) · [✅ Verificado](#-verified-working--every-key-is-tested) · [🧭 Como funciona](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Opções](#️-cli-options) · [🛰️ Proxies](#️-behind-a-proxy) · [🐞 Problemas](#-issues)
@@ -209,6 +210,16 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 
 Padrões: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Os modelos então são servidos como `n33/<model id>` e com balanceamento de carga entre todos os tokens; cada conexão carrega um token de `keys.txt`, que a ponte usa para aquela requisição.
 
+## 🔌 Conectar ao OmniRoute
+
+O [OmniRoute](https://omniroute.online) é um roteador auto-hospedado e compatível com OpenAI. Como o n33.ai não tem o formato da OpenAI, a ponte é com quem o OmniRoute fala — inicie-a primeiro e depois registre as chaves:
+
+```bash
+node src/serve.js &            # http://127.0.0.1:20177/v1
+node src/connect-omniroute.js    # registers the provider node + one connection per key
+```
+
+Padrões: `--base http://localhost:20128`, `--password 123456`, `--name "N33 AI"`, `--prefix n33`, `--base-url http://127.0.0.1:20177/v1`. Os modelos então são servidos como `n33/<model id>` e com balanceamento de carga entre todos os tokens; cada conexão carrega um token de `keys.txt`, que a ponte usa para aquela requisição.
 ## 🔑 O que uma chave lhe dá
 
 | | |

@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-3%20served-412991?style=for-the-badge)](https://n33.ai/chat)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 クイックスタート](#-quick-start) · [🎁 無料枠](#-free-tier--how-much-you-get) · [🤖 モデル](#-models--all-3-of-them) · [🧪 API の使い方](#-how-to-use-the-api) · [✅ 検証済み](#-verified-working--every-key-is-tested) · [🧭 仕組み](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ オプション](#️-cli-options) · [🛰️ プロキシ](#️-behind-a-proxy) · [🐞 問題報告](#-issues)
@@ -209,6 +210,16 @@ node src/connect-9router.js    # registers the provider node + one connection pe
 
 デフォルト：`--base http://localhost:20128`、`--password 123456`、`--name "N33 AI"`、`--prefix n33`、`--base-url http://127.0.0.1:20177/v1`。モデルは `n33/<model id>` として提供され、すべてのトークンに負荷分散されます。各接続は `keys.txt` のトークンを保持し、ブリッジはそのリクエストでそれを使います。
 
+## 🔌 OmniRoute への接続
+
+[OmniRoute](https://omniroute.online) はセルフホスト型の OpenAI 互換ルーターです。n33.ai は OpenAI の形をしていないため、OmniRoute が話す相手はブリッジになります — 先にブリッジを起動し、その後でキーを登録してください：
+
+```bash
+node src/serve.js &            # http://127.0.0.1:20177/v1
+node src/connect-omniroute.js    # registers the provider node + one connection per key
+```
+
+デフォルト：`--base http://localhost:20128`、`--password 123456`、`--name "N33 AI"`、`--prefix n33`、`--base-url http://127.0.0.1:20177/v1`。モデルは `n33/<model id>` として提供され、すべてのトークンに負荷分散されます。各接続は `keys.txt` のトークンを保持し、ブリッジはそのリクエストでそれを使います。
 ## 🔑 1 つのキーで得られるもの
 
 | | |
