@@ -75,6 +75,7 @@ Cualquier otro modelo del catálogo es aceptado por el endpoint, pero lo respond
 N33 AI habla su propio protocolo — un `POST /api/chat/stream` multipart que responde con líneas de evento `data: {...}` — así que nada que espere OpenAI puede hablar con él directamente. **`src/serve.js` es ese endpoint**: apunta cualquier cliente OpenAI hacia él y los tokens de `keys.txt` se comportan como claves de API normales.
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 Inicio rápido
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

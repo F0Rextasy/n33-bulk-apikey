@@ -75,6 +75,7 @@ node src/cli.js --verify-only     # every token in keys.txt is re-tested with a 
 N33 AI 使用自己的协议——一个以 `data: {...}` 事件行作答的 multipart `POST /api/chat/stream`——因此任何期待 OpenAI 协议的客户端都无法直接与它通信。**`src/serve.js` 就是那个端点**：将任何 OpenAI 客户端指向它，`keys.txt` 中的令牌就会像普通 API 密钥一样工作。
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 快速开始
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

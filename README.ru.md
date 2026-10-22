@@ -75,6 +75,7 @@ node src/cli.js --verify-only     # every token in keys.txt is re-tested with a 
 N33 AI говорит на собственном протоколе — multipart `POST /api/chat/stream`, который отвечает строками событий `data: {...}`, — поэтому ничто, ожидающее OpenAI, не может общаться с ним напрямую. **`src/serve.js` — это тот самый эндпоинт**: направьте на него любого OpenAI-клиента, и токены из `keys.txt` будут вести себя как обычные API-ключи.
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 Быстрый старт
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

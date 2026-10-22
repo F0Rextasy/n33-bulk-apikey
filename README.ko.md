@@ -75,6 +75,7 @@ node src/cli.js --verify-only     # keys.txt의 모든 토큰을 실제 채팅 �
 N33 AI는 자체 프로토콜을 씁니다 — `data: {...}` 이벤트 라인으로 응답하는 multipart `POST /api/chat/stream` — 따라서 OpenAI를 기대하는 무엇도 직접 대화할 수 없습니다. **`src/serve.js`가 바로 그 엔드포인트입니다**: 어떤 OpenAI 클라이언트든 여기에 연결하면 `keys.txt`의 토큰이 평범한 API 키처럼 동작합니다.
 
 ```bash
+
 # 터미널 1 — 브리지 (기본값 http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 빠른 시작
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

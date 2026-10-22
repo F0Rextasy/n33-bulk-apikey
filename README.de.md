@@ -75,6 +75,7 @@ Alles andere im Katalog wird vom Endpunkt akzeptiert, aber von `n33-chat` beantw
 N33 AI spricht sein eigenes Protokoll — ein Multipart-`POST /api/chat/stream`, das in `data: {...}`-Ereigniszeilen antwortet — daher kann nichts, was OpenAI erwartet, direkt damit sprechen. **`src/serve.js` ist dieser Endpunkt**: Richte einen beliebigen OpenAI-Client darauf, und die Token in `keys.txt` verhalten sich wie gewöhnliche API-Schlüssel.
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 Schnellstart
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

@@ -75,6 +75,7 @@ Tout autre identifiant du catalogue est accepté par le point de terminaison mai
 N33 AI parle son propre protocole — un `POST /api/chat/stream` en multipart qui répond par des lignes d'événements `data: {...}` — donc rien qui s'attende à OpenAI ne peut lui parler directement. **`src/serve.js` est ce point de terminaison** : pointez n'importe quel client OpenAI dessus et les jetons de `keys.txt` se comportent comme de simples clés API.
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 Démarrage rapide
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 

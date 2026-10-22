@@ -75,6 +75,7 @@ Katalogdaki başka her şey uç nokta tarafından kabul edilir ancak `n33-chat` 
 N33 AI kendi protokolünü konuşur — `data: {...}` olay satırlarıyla yanıt veren multipart bir `POST /api/chat/stream` — dolayısıyla OpenAI bekleyen hiçbir şey onunla doğrudan konuşamaz. **`src/serve.js` işte o uç noktadır**: herhangi bir OpenAI istemcisini ona yönlendirin ve `keys.txt` içindeki token'lar sıradan API anahtarları gibi davransın.
 
 ```bash
+
 # terminal 1 — the bridge (defaults to http://127.0.0.1:20177/v1)
 node src/serve.js
 
@@ -98,6 +99,7 @@ curl -s https://n33.ai/api/v1/me          -H "Authorization: Bearer $TOKEN"   # 
 ## 🛠 Hızlı başlangıç
 
 ```bash
+
 # clone or fork this repository, then:
 cd n33-bulk-apikey
 
