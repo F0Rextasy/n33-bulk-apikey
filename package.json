@@ -16,7 +16,8 @@
     "start": "node src/launcher.js",
     "mint": "node src/cli.js",
     "9router": "node src/connect-9router.js",
-    "serve": "node src/serve.js"
+    "serve": "node src/serve.js",
+    "omniroute": "node src/connect-omniroute.js"
   },
   "keywords": [
     "api-key",
