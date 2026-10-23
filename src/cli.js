@@ -87,6 +87,20 @@ const LOGDIR = path.join(ROOT, 'outputs');
 fs.mkdirSync(LOGDIR, { recursive: true });
 const LOG = path.join(LOGDIR, 'mint.log');
 
+/** Dead-key report: only definite rejections — 429/5xx/transport never land here. */
+const DEAD_FILE = path.join(ROOT, 'keys-dead.txt');
+const DEAD_STATUS = new Set([401, 403]);
+const DEAD_REASON = /banned|deactivated|disabled|suspended|quota|insufficient|forbidden|unauthorized/i;
+function recordDead(key, status, sample) {
+  if (!key) return;
+  if (!DEAD_STATUS.has(Number(status)) && !DEAD_REASON.test(String(sample || ''))) return;
+  const why = `${status}${sample ? ' ' + String(sample).replace(/\s+/g, ' ').slice(0, 60) : ''}`;
+  try {
+    fs.mkdirSync(path.dirname(DEAD_FILE), { recursive: true });
+    fs.appendFileSync(DEAD_FILE, `${key}\t${why}\t${new Date().toISOString()}\n`);
+  } catch (e) { /* diagnostics must never break the run */ }
+}
+
 const nowIso = () => new Date().toISOString();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const jitter = (base) => base + Math.floor(Math.random() * 250);
@@ -345,6 +359,7 @@ async function verifyOnly() {
         row = `  exit    ${token.slice(0, 8)}… untested — ${maskExit(label(proxy))} ${proof.error || ''}`;
       } else {
         refused++;
+        recordDead(token, proof.status, proof.error);
         row = `  dead    ${token.slice(0, 8)}… status=${proof.status} ${proof.error || ''}`;
       }
       results[index] = row;

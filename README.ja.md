@@ -21,7 +21,7 @@
 [![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
-[🛠 クイックスタート](#-quick-start) · [🎁 無料枠](#-free-tier--how-much-you-get) · [🤖 モデル](#-models--all-3-of-them) · [🧪 API の使い方](#-how-to-use-the-api) · [✅ 検証済み](#-verified-working--every-key-is-tested) · [🧭 仕組み](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ オプション](#️-cli-options) · [🛰️ プロキシ](#️-behind-a-proxy) · [🐞 問題報告](#-issues)
+[🛠 クイックスタート](#-quick-start) · [🎁 無料枠](#-free-tier--how-much-you-get) · [🤖 モデル](#-models--all-3-of-them) · [🧪 API の使い方](#-how-to-use-the-api) · [✅ 検証済み](#-verified-working--every-key-is-tested) · [🧭 仕組み](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [🔌 OmniRoute](#-connect-to-omniroute) · [⚙️ オプション](#️-cli-options) · [🛰️ プロキシ](#️-behind-a-proxy) · [🐞 問題報告](#-issues)
 
 </div>
 
@@ -109,6 +109,7 @@ printf 'socks5h://127.0.0.1:1080\n' > proxies.txt
 
 # 2) go
 node src/launcher.js        # interactive
+
 # or directly:
 node src/cli.js --count 100 --conc 6
 
@@ -220,6 +221,7 @@ node src/connect-omniroute.js    # registers the provider node + one connection 
 ```
 
 デフォルト：`--base http://localhost:20128`、`--password 123456`、`--name "N33 AI"`、`--prefix n33`、`--base-url http://127.0.0.1:20177/v1`。モデルは `n33/<model id>` として提供され、すべてのトークンに負荷分散されます。各接続は `keys.txt` のトークンを保持し、ブリッジはそのリクエストでそれを使います。
+
 ## 🔑 1 つのキーで得られるもの
 
 | | |

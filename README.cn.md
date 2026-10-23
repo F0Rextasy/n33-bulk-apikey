@@ -21,7 +21,7 @@
 [![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
-[🛠 快速开始](#-quick-start) · [🎁 免费额度](#-free-tier--how-much-you-get) · [🤖 模型](#-models--all-3-of-them) · [🧪 使用 API](#-how-to-use-the-api) · [✅ 已验证](#-verified-working--every-key-is-tested) · [🧭 工作原理](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ 选项](#️-cli-options) · [🛰️ 代理](#️-behind-a-proxy) · [🐞 问题](#-issues)
+[🛠 快速开始](#-quick-start) · [🎁 免费额度](#-free-tier--how-much-you-get) · [🤖 模型](#-models--all-3-of-them) · [🧪 使用 API](#-how-to-use-the-api) · [✅ 已验证](#-verified-working--every-key-is-tested) · [🧭 工作原理](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [🔌 OmniRoute](#-connect-to-omniroute) · [⚙️ 选项](#️-cli-options) · [🛰️ 代理](#️-behind-a-proxy) · [🐞 问题](#-issues)
 
 </div>
 
@@ -109,6 +109,7 @@ printf 'socks5h://127.0.0.1:1080\n' > proxies.txt
 
 # 2) go
 node src/launcher.js        # interactive
+
 # or directly:
 node src/cli.js --count 100 --conc 6
 
@@ -220,6 +221,7 @@ node src/connect-omniroute.js    # registers the provider node + one connection 
 ```
 
 默认值：`--base http://localhost:20128`、`--password 123456`、`--name "N33 AI"`、`--prefix n33`、`--base-url http://127.0.0.1:20177/v1`。随后模型会以 `n33/<model id>` 的形式提供，并在每个令牌之间进行负载均衡；每个连接携带 `keys.txt` 中的一个令牌，桥接服务会在该请求中使用它。
+
 ## 🔑 一个密钥能带来什么
 
 | | |
